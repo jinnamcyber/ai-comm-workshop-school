@@ -29,7 +29,7 @@ button:disabled{opacity:.5}
 </head>
 <body>
 <div class="card">
-  <h1>📤 上傳作品</h1>
+  <h1>上傳作品</h1>
   <p class="sub">將你用 Gemini Canvas 做嘅教具傳上去，<br>講者會即場打開，同大家一齊討論。</p>
 
   <label for="name">你嘅稱呼 <small>（例：陳老師）</small></label>
@@ -51,7 +51,7 @@ button:disabled{opacity:.5}
   <label for="code">方法三：直接貼 HTML 代碼</label>
   <textarea id="code" placeholder="<!doctype html>…" spellcheck="false"></textarea>
 
-  <button id="go">傳上去 🚀</button>
+  <button id="go">傳上去</button>
   <div class="msg" id="msg"></div>
   <div class="hint">三種方法揀一種就得。作品會公開顯示喺工作坊大螢幕，請勿包含學生個人資料。<br>每部手機最多傳 5 份。</div>
 </div>
@@ -90,7 +90,7 @@ button:disabled{opacity:.5}
     if(r.error){say('傳唔到，請再試一次（'+r.error.message+'）','err');$('go').disabled=false;return}
     bump();try{localStorage.setItem('work_name',name)}catch(e){}
     $('title').value='';$('link').value='';$('code').value='';$('file').value='';fileText=null;$('fn').textContent='撳呢度揀檔案';$('fl').classList.remove('has');
-    say('已經傳到大螢幕 ✅ 仲有作品就再傳','ok');
+    say('已經傳到大螢幕，仲有作品就再傳','ok');
     setTimeout(function(){$('go').disabled=false},2500);
   });
 })();
