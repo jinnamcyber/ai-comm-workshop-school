@@ -35,19 +35,20 @@ h1{margin:0;font-size:clamp(22px,2.4vw,34px);letter-spacing:.08em}
 #linkview{flex:1;display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;text-align:center;padding:30px}
 #linkview a{font-size:clamp(20px,2.6vw,34px);padding:16px 38px}
 #linkview .u{color:var(--mut);word-break:break-all;max-width:80vw;font-size:16px}
+.ic{width:1em;height:1em;vertical-align:-.13em;margin-right:.3em;flex:none}
 </style>
 </head>
 <body>
 <header>
-  <h1>作品牆</h1><div id="count">0 份作品</div><div class="sp"></div>
+  <h1><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>作品牆</h1><div id="count">0 份作品</div><div class="sp"></div>
   <div class="qrmini"><img id="qrimg" alt="QR" src="share-qr.svg"><span>掃碼上傳作品</span></div>
 </header>
 <div id="grid"></div>
-<div id="empty"><div>掃右上角 QR，將作品傳上嚟<br>一傳就喺度出現</div></div>
+<div id="empty"><div style="font-size:3em"><svg class="ic" style="margin:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg></div><div>掃右上角 QR，將作品傳上嚟<br>一傳就喺度出現</div></div>
 <div id="viewer">
-  <div id="vbar"><div id="vt"></div><a id="vopen" target="_blank" rel="noopener noreferrer" style="display:none">新分頁打開 ↗</a><button class="x" id="vx">關閉 ✕</button></div>
+  <div id="vbar"><div id="vt"></div><a id="vopen" target="_blank" rel="noopener noreferrer" style="display:none">新分頁打開<svg class="ic" style="margin:0 0 0 .3em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></a><button class="x" id="vx"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>關閉</button></div>
   <iframe id="frame" sandbox="allow-scripts allow-forms allow-modals allow-popups" referrerpolicy="no-referrer" title="作品預覽"></iframe>
-  <div id="linkview"><div id="lt" style="font-size:clamp(18px,2vw,26px)"></div><a id="lopen" class="b" target="_blank" rel="noopener noreferrer">打開作品連結 ↗</a><div class="u" id="lu"></div></div>
+  <div id="linkview"><div id="lt" style="font-size:clamp(18px,2vw,26px)"></div><a id="lopen" class="b" target="_blank" rel="noopener noreferrer">打開作品連結<svg class="ic" style="margin:0 0 0 .3em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></a><div class="u" id="lu"></div></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="work-config.js"></script>

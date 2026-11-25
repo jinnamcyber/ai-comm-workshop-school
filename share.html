@@ -25,11 +25,12 @@ button:disabled{opacity:.5}
 .msg{min-height:1.6em;margin-top:14px;font-size:17px;text-align:center}
 .ok{color:#9ff0b8}.err{color:#ffb4b4}
 .hint{margin-top:16px;color:var(--mut);font-size:13px;line-height:1.7;text-align:center}
+.ic{width:1em;height:1em;vertical-align:-.13em;margin-right:.3em;flex:none}
 </style>
 </head>
 <body>
 <div class="card">
-  <h1>上傳作品</h1>
+  <h1><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>上傳作品</h1>
   <p class="sub">將你用 Gemini Canvas 做嘅教具傳上去，<br>講者會即場打開，同大家一齊討論。</p>
 
   <label for="name">你嘅稱呼 <small>（例：陳老師）</small></label>
@@ -51,7 +52,7 @@ button:disabled{opacity:.5}
   <label for="code">方法三：直接貼 HTML 代碼</label>
   <textarea id="code" placeholder="<!doctype html>…" spellcheck="false"></textarea>
 
-  <button id="go">傳上去</button>
+  <button id="go"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>傳上去</button>
   <div class="msg" id="msg"></div>
   <div class="hint">三種方法揀一種就得。作品會公開顯示喺工作坊大螢幕，請勿包含學生個人資料。<br>每部手機最多傳 5 份。</div>
 </div>
@@ -60,7 +61,7 @@ button:disabled{opacity:.5}
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)};
-  var MAX=500000,LIM=5,KEY='work_count_v1',fileText=null;
+  var CK='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-9"/></svg>',MAX=500000,LIM=5,KEY='work_count_v1',fileText=null;
   function cnt(){try{return +localStorage.getItem(KEY)||0}catch(e){return 0}}
   function bump(){try{localStorage.setItem(KEY,String(cnt()+1))}catch(e){}}
   function say(s,c){$('msg').textContent=s;$('msg').className='msg '+(c||'')}
@@ -72,7 +73,7 @@ button:disabled{opacity:.5}
     if(!f){$('fn').textContent='撳呢度揀檔案';return}
     if(f.size>MAX){say('檔案太大（'+Math.round(f.size/1024)+' KB），請改用連結','err');this.value='';$('fn').textContent='撳呢度揀檔案';return}
     var r=new FileReader();
-    r.onload=function(){fileText=String(r.result);$('fn').textContent='✓ '+f.name;$('fl').classList.add('has');say('')};
+    r.onload=function(){fileText=String(r.result);$('fn').innerHTML=CK;$('fn').appendChild(document.createTextNode(f.name));$('fl').classList.add('has');say('')};
     r.readAsText(f,'utf-8');
   });
 
