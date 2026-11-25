@@ -23,6 +23,13 @@ h1{margin:0;font-size:clamp(20px,2.6vw,34px);letter-spacing:.1em}
 #qr img{display:block;width:120px;height:120px}
 body.showqr #qr{display:block}
 #status{position:fixed;left:18px;bottom:12px;color:#ffffff66;font-size:12px;z-index:3}
+body.embed{background:transparent}
+body.embed #stars,body.embed header,body.embed #status{display:none}
+body.embed #cloud{inset:3vh 3vw 3vh 3vw}
+body.embed.showqr #cloud{right:20vw}
+body.embed #qr{right:2.5vw;bottom:4vh;background:rgba(255,255,255,.96);padding:10px 14px;border-radius:18px;box-shadow:0 10px 40px #0008}
+body.embed #qr img{width:clamp(120px,15vw,220px);height:clamp(120px,15vw,220px)}
+body.embed #qr div{font-size:clamp(14px,1.5vw,22px);font-weight:700;margin-top:4px}
 </style>
 </head>
 <body>
@@ -120,6 +127,7 @@ body.showqr #qr{display:block}
   fit();addEventListener('resize',fit);
   (function tick(ts){c.clearRect(0,0,cv.width,cv.height);S.forEach(function(s){c.globalAlpha=.35+.35*Math.sin(ts/900+s.p);c.fillStyle='#fff';c.beginPath();c.arc(s.x,s.y,s.r,0,6.3);c.fill()});requestAnimationFrame(tick)})(0);
 
+  if(/[?&]embed=1/.test(location.search))document.body.classList.add('embed');
   // ?qr=1 喺角落顯示許願 QR（需要 qr.svg）
   if(/[?&]qr=1/.test(location.search)){document.body.classList.add('showqr');document.getElementById('qrimg').src='wish-qr.svg'}
 })();
