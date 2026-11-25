@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>上傳作品</title>
+<style>
+:root{--bg1:#1b1446;--bg2:#0e3b5c;--ink:#f4f1ff;--mut:#b9b3dd;--acc:#7ae0ff;--acc2:#9ff0b8}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));padding:22px 18px 40px}
+.card{max-width:480px;margin:0 auto}
+h1{margin:.2em 0 .1em;font-size:28px;letter-spacing:.06em;text-align:center}
+p.sub{margin:0 0 18px;color:var(--mut);font-size:15px;line-height:1.6;text-align:center}
+label{display:block;margin:14px 2px 6px;font-size:15px;font-weight:700}
+label small{font-weight:400;color:var(--mut)}
+input[type=text],input[type=url],textarea{width:100%;border-radius:14px;border:2px solid #ffffff33;background:#ffffff14;color:var(--ink);font:inherit;font-size:18px;padding:12px 14px;outline:none}
+textarea{height:90px;resize:vertical;font-size:15px}
+input:focus,textarea:focus{border-color:var(--acc)}
+.file{display:block;border:2px dashed #ffffff55;border-radius:14px;padding:14px;text-align:center;color:var(--mut);font-size:16px;cursor:pointer}
+.file input{display:none}
+.file.has{border-color:var(--acc2);color:var(--acc2)}
+.or{text-align:center;color:var(--mut);font-size:13px;margin:10px 0 0}
+button{width:100%;margin-top:20px;border:0;border-radius:999px;padding:16px;font:inherit;font-size:20px;font-weight:700;color:#06263a;background:linear-gradient(90deg,var(--acc),var(--acc2));cursor:pointer}
+button:disabled{opacity:.5}
+.msg{min-height:1.6em;margin-top:14px;font-size:17px;text-align:center}
+.ok{color:#9ff0b8}.err{color:#ffb4b4}
+.hint{margin-top:16px;color:var(--mut);font-size:13px;line-height:1.7;text-align:center}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>📤 上傳作品</h1>
+  <p class="sub">將你用 Gemini Canvas 做嘅教具傳上去，<br>講者會即場打開，同大家一齊討論。</p>
+
+  <label for="name">你嘅稱呼 <small>（例：陳老師）</small></label>
+  <input id="name" type="text" maxlength="30" autocomplete="off">
+
+  <label for="title">作品名 <small>（例：分數配對遊戲）</small></label>
+  <input id="title" type="text" maxlength="60" autocomplete="off">
+
+  <label for="link">方法一：貼 Canvas 分享連結</label>
+  <input id="link" type="url" inputmode="url" placeholder="https://…" autocomplete="off">
+
+  <div class="or">— 或者 —</div>
+
+  <label>方法二：上傳 HTML 檔 <small>（最大約 500 KB）</small></label>
+  <label class="file" id="fl"><input id="file" type="file" accept=".html,.htm,text/html"><span id="fn">撳呢度揀檔案</span></label>
+
+  <div class="or">— 或者 —</div>
+
+  <label for="code">方法三：直接貼 HTML 代碼</label>
+  <textarea id="code" placeholder="<!doctype html>…" spellcheck="false"></textarea>
+
+  <button id="go">傳上去 🚀</button>
+  <div class="msg" id="msg"></div>
+  <div class="hint">三種方法揀一種就得。作品會公開顯示喺工作坊大螢幕，請勿包含學生個人資料。<br>每部手機最多傳 5 份。</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="work-config.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var MAX=500000,LIM=5,KEY='work_count_v1',fileText=null;
+  function cnt(){try{return +localStorage.getItem(KEY)||0}catch(e){return 0}}
+  function bump(){try{localStorage.setItem(KEY,String(cnt()+1))}catch(e){}}
+  function say(s,c){$('msg').textContent=s;$('msg').className='msg '+(c||'')}
+  try{$('name').value=localStorage.getItem('work_name')||''}catch(e){}
+  var sb=window.supabase.createClient(WORK_CFG.url,WORK_CFG.key);
+
+  $('file').addEventListener('change',function(){
+    var f=this.files[0];fileText=null;$('fl').classList.remove('has');
+    if(!f){$('fn').textContent='撳呢度揀檔案';return}
+    if(f.size>MAX){say('檔案太大（'+Math.round(f.size/1024)+' KB），請改用連結','err');this.value='';$('fn').textContent='撳呢度揀檔案';return}
+    var r=new FileReader();
+    r.onload=function(){fileText=String(r.result);$('fn').textContent='✓ '+f.name;$('fl').classList.add('has');say('')};
+    r.readAsText(f,'utf-8');
+  });
+
+  $('go').addEventListener('click',async function(){
+    var name=$('name').value.trim(),title=$('title').value.trim(),link=$('link').value.trim(),code=$('code').value.trim();
+    var html=fileText||code||null;
+    if(!name||!title){say('請填寫稱呼同作品名','err');return}
+    if(!link&&!html){say('請貼連結、上傳檔案或者貼代碼','err');return}
+    if(link&&!/^https?:\/\//i.test(link)){say('連結要以 http:// 或 https:// 開頭','err');return}
+    if(html&&html.length>MAX){say('內容太大，請改用連結','err');return}
+    if(cnt()>=LIM){say('呢部手機已經傳咗 '+LIM+' 份喇，多謝！','err');return}
+    $('go').disabled=true;say('傳緊…');
+    var row={name:name,title:title,link:link||null,html:html};
+    var r=await sb.from('works').insert(row);
+    if(r.error){say('傳唔到，請再試一次（'+r.error.message+'）','err');$('go').disabled=false;return}
+    bump();try{localStorage.setItem('work_name',name)}catch(e){}
+    $('title').value='';$('link').value='';$('code').value='';$('file').value='';fileText=null;$('fn').textContent='撳呢度揀檔案';$('fl').classList.remove('has');
+    say('已經傳到大螢幕 ✅ 仲有作品就再傳','ok');
+    setTimeout(function(){$('go').disabled=false},2500);
+  });
+})();
+</script>
+</body>
+</html>
