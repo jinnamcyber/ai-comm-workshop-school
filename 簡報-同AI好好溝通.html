@@ -441,8 +441,6 @@ p{margin:0}
   <p class="lead f" style="font-size:1.35em">溝通方法係通用嘅：Gemini、ChatGPT、DeepSeek 都一樣有效。</p>
 </section>
 
-<section class="slide" id="wish" data-title="許願池" style="padding:0"><iframe id="wishfull" title="即時詞雲" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none"></iframe></section>
-
 <!-- 18 END -->
 <section class="slide title" data-title="多謝">
   <div class="floaty"><img class="hero-art" src="art/school_taipa.jpg" alt="氹仔中葡學校嘅卡通街景"></div>
@@ -693,7 +691,6 @@ const enter = (s, on) => {
   if (s.hasAttribute('data-builder') && on) { loadPreview(true); setTimeout(fitFrames, 50); renderBuilder(); }
   if (!on) s.querySelectorAll('.trap.flip').forEach(t => t.classList.remove('flip'));
 };
-const wishPrev = () => { const f = $('wishfull'); if (f && !f.getAttribute('src')) f.src = 'wish-wall.html?embed=1&qr=1'; };
 function go(i, fragState) {
   i = Math.max(0, Math.min(slides.length - 1, i));
   const prev = cur; cur = i;
@@ -701,7 +698,6 @@ function go(i, fragState) {
   const fs = frags(slides[i]); fs.forEach(f => f.classList.toggle('in', fragState === 'all'));
   if (prev !== i) enter(slides[prev], false);
   enter(slides[i], true);
-  if (slides[i].id === 'wish') setTimeout(wishPrev, 60);
   $('progress').style.width = ((i + 1) / slides.length * 100) + '%';
   $('pageno').textContent = (i + 1) + ' / ' + slides.length;
   try { history.replaceState(null, '', '#' + (i + 1)); } catch (_) {}
@@ -724,7 +720,7 @@ const fsToggle = () => { if (!document.fullscreenElement) document.documentEleme
 $('bfs').onclick = fsToggle; $('bov').onclick = () => toggleOv(true);
 let tx = null; document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
 document.addEventListener('touchend', e => { if (tx === null || overlayOpen()) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 60) (dx < 0 ? next : prev)(); tx = null; });
-window.addEventListener('resize', () => { fitFrames(); wishPrev(); if (slides[cur] && slides[cur].hasAttribute('data-cloud')) buildCloud(false); });
+window.addEventListener('resize', () => { fitFrames(); if (slides[cur] && slides[cur].hasAttribute('data-cloud')) buildCloud(false); });
 
 /* ---------- starfield ---------- */
 const cv = $('stars'), cx = cv.getContext('2d'); let W, H, stars = [], mx = .5, my = .5;
